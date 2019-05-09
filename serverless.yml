@@ -1,0 +1,27 @@
+# service name
+service: gettogether
+
+# the provider (azure, aws, ibmcloud...)
+provider: 
+  name: aws
+  runtime: nodejs8.10
+  region: eu-west-1
+  # the environments of the lambdas (prod, pre, )
+  stage: dev
+
+functions:
+  helloWorld:
+    # after the point is the function to invoke
+    handler: src/functions/helloWorld.handler
+    events:
+      - http:
+          path: api/helloWorld/{name}
+          method: get
+
+  helloWorldPost:
+    # after the point is the function to invoke
+    handler: src/functions/helloWorld.handlerpost
+    events:
+      - http:
+          path: api/helloWorld
+          method: post
