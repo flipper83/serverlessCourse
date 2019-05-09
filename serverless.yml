@@ -6,20 +6,27 @@ plugins:
   - serverless-pseudo-parameters
   - serverless-iam-roles-per-function
 
+#variables for the yml
+custom:
+  defaultRegion: eu-west-1
+  defaultStage: dev${env:SLSUSER,""}
+  getTogethersTableName: ${self:provider.stage}-gettogethers
+
 # the provider (azure, aws, ibmcloud...)
 provider: 
   name: aws
   runtime: nodejs8.10
-  region: eu-west-1
+  #opt is for the severless run when write --region at launch
+  region: ${opt:region, self:custom.defaultRegion}
   # the environments of the lambdas (prod, pre, )
-  stage: dev
+  stage: ${opt:stage, self:custom.defaultStage}
 
 resources:
   Resources:
     GetTogethersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: gettogethers
+        TableName: ${self:custom.getTogethersTableName}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: N
@@ -39,7 +46,9 @@ functions:
     iamRoleStatements:
       - Effect: Allow
         Action: dynamodb:scan
-        Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/gettogethers
+        Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:custom.getTogethersTableName}
+    environment:
+      getTogethersTableName: ${self:custom.getTogethersTableName}
 
   helloWorld: 
     # after the point is the function to invoke

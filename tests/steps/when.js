@@ -13,8 +13,9 @@ module.exports.we_invoke_getTogethers = () => {
 }
 
 async function viaHttp(functionPath, name) {
-    const host = `https://f4s25sgz8h.execute-api.eu-west-1.amazonaws.com/dev/api/${functionPath}`
-    const path = `${host}/${name}`
+    const host = process.env.TEST_BASE_URL; 
+    // `https://f4s25sgz8h.execute-api.eu-west-1.amazonaws.com/dev/api/${functionPath}`
+    const path = `${host}/${functionPath}/${name}`
 
     try {
         const httpReq = http("GET", path);
@@ -47,7 +48,7 @@ async function getTogethersViaHandler(functionPath, event) {
 }
 
 async function getTogethersViaHttp(functionPath) {
-    const apiRoot = "https://zusp1o2cq3.execute-api.eu-west-1.amazonaws.com/dev/api";
+    const apiRoot = process.env.TEST_BASE_URL; 
     const method = "GET";
 
     const url = `${apiRoot}/${functionPath}`;
