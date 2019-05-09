@@ -9,6 +9,20 @@ provider:
   # the environments of the lambdas (prod, pre, )
   stage: dev
 
+resources:
+  Resources:
+    GetTogethersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: gettogethers
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: N
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST 
+
 functions:
   helloWorld:
     # after the point is the function to invoke

@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "init-values": "AWS_PROFILE=serverless-local node seedGetTogethers.js gettogethers",
+    "deploy": "AWS_PROFILE=serverless-local npx serverless deploy",
     "test": "echo \"Error: no test specified\" && exit 1",
     "test-integration": "TEST_MODE=handler jest ./tests/*",
     "test-acceptance": "TEST_MODE=http jest ./tests/*"
@@ -15,5 +17,8 @@
     "serverless": "^1.41.1",
     "superagent": "^5.0.5",
     "superagent-promise": "^1.1.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.452.0"
   }
 }
