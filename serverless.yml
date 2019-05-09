@@ -24,7 +24,13 @@ resources:
         BillingMode: PAY_PER_REQUEST 
 
 functions:
-  helloWorld:
+  getTogethers:
+    handler: src/functions/getGetTogethers.handler
+    events:
+      - http:
+          path: api/getTogethers
+          method: get
+  helloWorld: 
     # after the point is the function to invoke
     handler: src/functions/helloWorld.handler
     events:
