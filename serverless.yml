@@ -1,6 +1,11 @@
 # service name
 service: gettogether
 
+#add plugins
+plugins:
+  - serverless-pseudo-parameters
+  - serverless-iam-roles-per-function
+
 # the provider (azure, aws, ibmcloud...)
 provider: 
   name: aws
@@ -30,6 +35,12 @@ functions:
       - http:
           path: api/getTogethers
           method: get
+    #Add permissions for the dynamo access.
+    iamRoleStatements:
+      - Effect: Allow
+        Action: dynamodb:scan
+        Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/gettogethers
+
   helloWorld: 
     # after the point is the function to invoke
     handler: src/functions/helloWorld.handler

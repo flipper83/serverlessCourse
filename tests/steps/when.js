@@ -8,7 +8,7 @@ module.exports.we_invoke_helloWorld = (name) => {
 module.exports.we_invoke_getTogethers = () => {
     const mode = process.env.TEST_MODE;
     return mode === "http"
-        ? getTogethersViaHttp(`getGetTogethers`, "GET")
+        ? getTogethersViaHttp(`getTogethers`, "GET")
         : getTogethersViaHandler("getGetTogethers");
 }
 
