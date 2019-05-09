@@ -18,7 +18,7 @@ async function viaHttp(functionPath, name) {
         }
     }catch (err) {
         return {
-            statusCode: err.statu
+            statusCode: err.status
         }
     }
 }
