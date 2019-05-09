@@ -11,6 +11,7 @@ custom:
   defaultRegion: eu-west-1
   defaultStage: dev${env:SLSUSER,""}
   getTogethersTableName: ${self:provider.stage}-gettogethers
+  joinGetTogetherSnsTopicName: ${self:provider.stage}-joingettogethers
 
 # the provider (azure, aws, ibmcloud...)
 provider: 
@@ -36,6 +37,11 @@ resources:
         BillingMode: PAY_PER_REQUEST 
 
 functions:
+  notifyOrganizer:
+    handler: src/functions/notifyOrganizer.handler
+    events:
+      - sns: ${self:custom.joinGetTogetherSnsTopicName}
+
   getTogethers:
     handler: src/functions/getGetTogethers.handler
     events:
