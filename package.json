@@ -4,12 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test:integration": "TEST_MODE=handler jest ./tests/*",
+    "test:integration:local": "AWS_PROFILE=serverless-local TEST_MODE=handler jest ./tests/*",
+    "test:acceptance": "TEST_MODE=http jest ./tests/*",
+    "test:acceptance:local": "TEST_BASE_URL=https://f4s25sgz8h.execute-api.eu-west-1.amazonaws.com/dev/api AWS_PROFILE=serverless-local TEST_MODE=http jest ./tests/*",
+    "deploy:prod": "serverless deploy --stage prod",
+    "deploy:sit": "serverless deploy --stage sit",
+    "deploy:local": "AWS_PROFILE=serverless-local npx serverless deploy",
+    "seed:sit": "node seedGetTogethers.js sit-gettogethers",
     "init-values-dev": "AWS_PROFILE=serverless-local node seedGetTogethers.js dev-gettogethers",
-    "init-values": "AWS_PROFILE=serverless-local node seedGetTogethers.js gettogethers",
-    "deploy": "AWS_PROFILE=serverless-local npx serverless deploy",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "test-integration": "AWS_PROFILE=serverless-local TEST_MODE=handler jest ./tests/*",
-    "test-acceptance": "TEST_BASE_URL=https://f4s25sgz8h.execute-api.eu-west-1.amazonaws.com/dev/api AWS_PROFILE=serverless-local TEST_MODE=http jest ./tests/*"
+    "init-values": "AWS_PROFILE=serverless-local node seedGetTogethers.js gettogethers"
   },
   "author": "",
   "license": "ISC",
