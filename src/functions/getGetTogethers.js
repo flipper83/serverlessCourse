@@ -2,6 +2,7 @@ const AWS = require("aws-sdk");
 const middy = require("middy");
 const { ssm } = require("middy/middlewares");
 const log = require("../lib/log");
+const captureCorrelationId = require("../middleware/captureCorrelationId");
 
 const tableName = process.env.getTogethersTableName;
 
@@ -9,7 +10,7 @@ const handler = async (event, context) => {
     AWS.config.region = "eu-west-1";
     const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-    log.info("executing getGetTogethers",{run});
+    log.info("executing getGetTogethers");
 
     const req = {
         TableName: context.tableName,
@@ -34,4 +35,4 @@ module.exports.handler = middy(handler).use(
         tableName: `${process.env.getTogethersTableName}`
       }
     })
-  );
+  ).use(captureCorrelationId());
