@@ -1,13 +1,15 @@
 const AWS = require("aws-sdk");
+const middy = require("middy");
+const { ssm } = require("middy/middlewares");
 
 const tableName = process.env.getTogethersTableName;
 
-exports.handler = async (event, context) => {
+const handler = async (event, context) => {
     AWS.config.region = "eu-west-1";
     const dynamodb = new AWS.DynamoDB.DocumentClient();
 
     const req = {
-        TableName: tableName,
+        TableName: context.tableName,
         Limit: 8
     };
 
@@ -19,3 +21,14 @@ exports.handler = async (event, context) => {
     };
     return response;
 };
+
+module.exports.handler = middy(handler).use(
+    ssm({
+      cache: true,
+      cacheExpiryInMillis: 3 * 60 * 1000,
+      setToContext: true,
+      names: {
+        tableName: `${process.env.getTogethersTableName}`
+      }
+    })
+  );
