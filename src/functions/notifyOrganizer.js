@@ -1,10 +1,17 @@
 const log = require("../lib/log");
+const middy = require("middy");
+const captureCorrelationId = require("../middleware/captureCorrelationId");
 
-exports.handler = async (event, context) => {
+const handler = async (event, context) => {
     const orderPlaced = JSON.parse(event.Records[0].Sns.Message);
 
-    log.info(`published a new message event`, orderPlaced);
-
+    if (orderPlaced.getTogetherId === "error"){
+        throw new Error("Simulating error");
+    }
+    
+    log.info("notified organiser", { getTogetherId: orderPlaced.getTogetherId, orderId: orderPlaced.orderId, userEmail: orderPlaced.userEmail });
 
     return orderPlaced.userEmail;
 };
+
+module.exports.handler = middy(handler).use(captureCorrelationId());

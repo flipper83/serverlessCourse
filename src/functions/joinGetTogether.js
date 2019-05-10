@@ -1,8 +1,9 @@
-const AWS = require("aws-sdk");
 const chance = require("chance").Chance();
-const sns = new AWS.SNS();
+const sns = require("../lib/snsClient");
+const middy = require("middy");
+const captureCorrelationId = require("../middleware/captureCorrelationId");
 
-exports.handler = async (event, context) => {
+const handler = async (event, context) => {
 
     const body = JSON.parse(event.body);
     const getTogetherId = body.getTogetherId;
@@ -33,3 +34,5 @@ exports.handler = async (event, context) => {
 
     return response;
 };
+
+module.exports.handler = middy(handler).use(captureCorrelationId());
