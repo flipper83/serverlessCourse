@@ -1,12 +1,15 @@
 const AWS = require("aws-sdk");
 const middy = require("middy");
 const { ssm } = require("middy/middlewares");
+const log = require("../lib/log");
 
 const tableName = process.env.getTogethersTableName;
 
 const handler = async (event, context) => {
     AWS.config.region = "eu-west-1";
     const dynamodb = new AWS.DynamoDB.DocumentClient();
+
+    log.info("executing getGetTogethers",{run});
 
     const req = {
         TableName: context.tableName,
