@@ -10,6 +10,8 @@ const handler = async (event, context) => {
     AWS.config.region = "eu-west-1";
     const dynamodb = new AWS.DynamoDB.DocumentClient();
 
+    // enable this throw to show the errors.
+    // throw new Error("lol");
     log.info("executing getGetTogethers");
 
     const req = {

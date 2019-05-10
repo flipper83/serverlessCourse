@@ -5,6 +5,8 @@ service: gettogether
 plugins:
   - serverless-pseudo-parameters
   - serverless-iam-roles-per-function
+  - serverless-plugin-canary-deployments
+  - serverless-plugin-aws-alerts
 
 #variables for the yml
 # be careful with ssm, because is going to introduce it packaging time. 
@@ -18,7 +20,12 @@ custom:
   joinGetTogetherSnsTopic: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:${self:custom.joinGetTogetherSnsTopicName}
   notifyOrganiserDLQSnsTopicName: ${self:provider.stage}-joingettogetherdlq
   notifyOrganiserDLQSnsTopic: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:${self:custom.notifyOrganiserDLQSnsTopicName}
-
+  alerts:
+    stages:
+      - ${self:provider.stage}
+    dashboards: false
+    alarms:
+      - functionErrors
 
 # the provider (azure, aws, ibmcloud...)
 provider: 
@@ -60,6 +67,9 @@ functions:
       - Effect: Allow
         Action: sns:Publish
         Resource: ${self:custom.joinGetTogetherSnsTopic}
+      - Effect: Allow
+        Action: codedeploy:*
+        Resource: '*'
 
   notifyOrganizer:
     handler: src/functions/notifyOrganizer.handler
@@ -73,6 +83,11 @@ functions:
           path: api/getTogethers
           method: get
     onError: ${self:custom.notifyOrganiserDLQSnsTopic}
+    deploymentSettings:
+      type: Canary10Percent5Minutes
+      alias: Live
+      alarms:
+        - GetGetTogethersFunctionErrorsAlarm #FunctionName + AlarmName + "Alarm"
 
   notifyOrganiserDLQ:
     handler: src/functions/notifyOrganiserDLQ.handler

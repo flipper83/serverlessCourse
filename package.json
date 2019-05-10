@@ -28,6 +28,8 @@
   "dependencies": {
     "aws-sdk": "^2.452.0",
     "chance": "^1.0.18",
-    "middy": "^0.25.1"
+    "middy": "^0.25.1",
+    "serverless-plugin-aws-alerts": "^1.2.4",
+    "serverless-plugin-canary-deployments": "^0.4.7"
   }
 }
